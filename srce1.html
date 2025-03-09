@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background with Falling Hearts</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://i.imgur.com/53sDWqq.gif');
+            background-repeat: repeat;
+            background-position: top left;
+            background-size: auto;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 50px; /* Povećano srce */
+            opacity: 0.9;
+            animation: fall linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .heart span {
+            font-size: 0.6em; /* Manji font za slova unutar srca */
+            color: white;
+            position: absolute;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Hologram efekt za MIRA */
+        .hologram-mira {
+            position: absolute;
+            font-size: 100px;
+            font-weight: bold;
+            color: rgba(0, 255, 255, 0.5); /* Bleđa, providna boja */
+            bottom: 5%;
+            left: 5%;
+            text-shadow: 
+                0 0 5px rgba(0, 255, 255, 0.5),
+                0 0 10px rgba(0, 255, 255, 0.5),
+                0 0 15px rgba(0, 255, 255, 0.5),
+                0 0 20px rgba(0, 255, 255, 0.5);
+            opacity: 0.8;
+            animation: hologram-effect 3s infinite alternate;
+        }
+
+        /* Hologram efekat */
+        @keyframes hologram-effect {
+            0% {
+                text-shadow: 0 0 5px rgba(0, 255, 255, 0.5),
+                             0 0 10px rgba(0, 255, 255, 0.5),
+                             0 0 15px rgba(0, 255, 255, 0.5),
+                             0 0 20px rgba(0, 255, 255, 0.5),
+                             0 0 30px rgba(0, 255, 255, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                             0 0 20px rgba(0, 255, 255, 0.5),
+                             0 0 30px rgba(0, 255, 255, 0.5),
+                             0 0 50px rgba(0, 255, 255, 0.5),
+                             0 0 60px rgba(0, 255, 255, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        const letters = ["M", "I", "R", "A"];
+        const heartColors = ["red", "pink", "blue", "green", "purple", "orange", "gold"];
+
+        // Funkcija za nasumičnu promenu pozadine
+        function shuffleBackground() {
+            const backgrounds = [
+                'https://i.imgur.com/53sDWqq.gif',
+                'https://i.imgur.com/e4Hy5Yr.gif',
+                'https://i.imgur.com/1DBAzgl.jpg',
+                'https://i.imgur.com/OZ3r1x2.gif',
+                'https://i.imgur.com/ZBg2Oib.gif',
+                'https://i.imgur.com/bwatzEB.gif',
+                'https://i.imgur.com/aNewBg2.jpg',
+                'https://i.imgur.com/Uxtb4JYl.png',
+                'https://i.imgur.com/wQc59dDl.png',
+                'https://i.imgur.com/uQoHbdb.gif',
+                'https://i.imgur.com/yMwbuVDl.png',
+                'https://i.imgur.com/QoXRB2al.png',
+                'https://i.imgur.com/Q4rDeDV.gif',
+                'https://i.imgur.com/ZwS2id5.gif',
+                'https://i.imgur.com/izCZ2fy.gif',
+                'https://i.imgur.com/hHgApHh.gif',
+                'https://i.imgur.com/4m63DJGl.png',
+                'https://i.imgur.com/S7fjd3fl.png',
+                'https://i.imgur.com/XzZBSj8l.jpg'
+            ];
+
+            let usedBackgrounds = [];
+            if (usedBackgrounds.length === backgrounds.length) {
+                usedBackgrounds = [];
+            }
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * backgrounds.length);
+            } while (usedBackgrounds.includes(randomIndex));
+
+            document.body.style.backgroundImage = `url('${backgrounds[randomIndex]}')`;
+            usedBackgrounds.push(randomIndex);
+        }
+
+        // Funkcija za kreiranje srca sa slovom unutar njega
+        function createHeart(letter, positionX, positionY) {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+
+            // Randomizovanje boje srca
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.color = color;
+
+            heart.innerHTML = `<span>${letter}</span>❤️`;
+
+            heart.style.left = positionX + "px";
+            heart.style.top = positionY + "px";
+            heart.style.animationDuration = Math.random() * 5 + 5 + "s";
+
+            document.body.appendChild(heart);
+
+            // Uklanjanje srca nakon što završi animacija
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        // Kreiramo padajuća srca u redosledu M, I, R, A
+        let letterIndex = 0;
+        setInterval(() => {
+            const randomLetter = letters[letterIndex];
+            createHeart(randomLetter, Math.random() * window.innerWidth, -30); // Pozicija srca na ekranu
+            letterIndex = (letterIndex + 1) % letters.length;
+        }, 1000);
+
+        // Pokrećemo promenu pozadine
+        shuffleBackground();
+        setInterval(shuffleBackground, 300000); // Promena pozadine svakih 5 minuta
+
+        // Dodajemo hologram za "MIRA"
+        setTimeout(() => {
+            const miraText = document.createElement("div");
+            miraText.classList.add("hologram-mira");
+            miraText.textContent = "MIRA";
+            document.body.appendChild(miraText);
+        }, 3000); // Hologram se pojavljuje nakon 3 sekunde
+    </script>
+
+</body>
+</html>
