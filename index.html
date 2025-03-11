@@ -8,18 +8,17 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('https://i.imgur.com/53sDWqq.gif');
-            background-repeat: repeat;
             background-position: top left;
-            background-size: auto;
+            background-repeat: repeat;
             height: 100vh;
             overflow: hidden;
             position: relative;
+            transition: background-image 1s ease-in-out;
         }
 
         .heart {
             position: absolute;
-            font-size: 50px; /* Povećano srce */
+            font-size: 50px;
             opacity: 0.9;
             animation: fall linear infinite;
             display: flex;
@@ -28,138 +27,108 @@
         }
 
         .heart span {
-            font-size: 0.6em; /* Manji font za slova unutar srca */
+            font-size: 0.6em;
             color: white;
             position: absolute;
         }
 
         @keyframes fall {
-            0% {
-                transform: translateY(-10vh);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
+            0% { transform: translateY(-10vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
         }
 
-        /* Hologram efekt za MIRA */
-        .hologram-mira {
+        .signature {
             position: absolute;
-            font-size: 100px;
+            bottom: 10px;
+            right: 20px;
+            font-size: 24px;
             font-weight: bold;
-            color: rgba(0, 255, 255, 0.5); /* Bleđa, providna boja */
-            bottom: 5%;
-            left: 5%;
-            text-shadow: 
-                0 0 5px rgba(0, 255, 255, 0.5),
-                0 0 10px rgba(0, 255, 255, 0.5),
-                0 0 15px rgba(0, 255, 255, 0.5),
-                0 0 20px rgba(0, 255, 255, 0.5);
-            opacity: 0.8;
-            animation: hologram-effect 3s infinite alternate;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transform: rotateY(0deg);
+            animation: rotate-text 3s ease-in-out infinite;
         }
 
-        /* Hologram efekat */
-        @keyframes hologram-effect {
-            0% {
-                text-shadow: 0 0 5px rgba(0, 255, 255, 0.5),
-                             0 0 10px rgba(0, 255, 255, 0.5),
-                             0 0 15px rgba(0, 255, 255, 0.5),
-                             0 0 20px rgba(0, 255, 255, 0.5),
-                             0 0 30px rgba(0, 255, 255, 0.5);
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
-                             0 0 20px rgba(0, 255, 255, 0.5),
-                             0 0 30px rgba(0, 255, 255, 0.5),
-                             0 0 50px rgba(0, 255, 255, 0.5),
-                             0 0 60px rgba(0, 255, 255, 0.5);
-            }
+        @keyframes rotate-text {
+            0% { opacity: 0; transform: rotateY(90deg); }
+            20% { opacity: 1; transform: rotateY(0deg); }
+            80% { opacity: 1; transform: rotateY(0deg); }
+            100% { opacity: 0; transform: rotateY(-90deg); }
+        }
+
+        .hologram {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: cyan;
+            text-shadow: 0 0 10px cyan, 0 0 20px cyan, 0 0 30px cyan;
         }
     </style>
 </head>
 <body>
-
+    <div class="hologram">MIRA</div>
     <script>
         const letters = ["M", "I", "R", "A"];
         const heartColors = ["red", "pink", "blue", "green", "purple", "orange", "gold"];
+        const backgrounds = [
+            'https://i.imgur.com/53sDWqq.gif',
+            'https://i.imgur.com/ZvBUtekl.png'
+            'https://i.imgur.com/e4Hy5Yr.gif',
+            'https://i.imgur.com/1DBAzgl.jpg',
+            'https://i.imgur.com/ZBg2Oib.gif',
+            'https://i.imgur.com/bwatzEB.gif',
+            'https://i.imgur.com/sneZxIS.gif',
+            'https://i.imgur.com/uQoHbdb.gif',
+            'https://i.imgur.com/BoRQdmV.gif',
+            'https://i.imgur.com/Q4rDeDV.gif',
+            'https://i.imgur.com/ZwS2id5.gif',
+            'https://i.imgur.com/izCZ2fy.gif',
+            'https://i.imgur.com/hHgApHh.gif'
+        ];
 
-        // Funkcija za nasumičnu promenu pozadine
+        let bgIndex = 0;
         function shuffleBackground() {
-            const backgrounds = [
-                'https://i.imgur.com/53sDWqq.gif',
-                'https://i.imgur.com/e4Hy5Yr.gif',
-                'https://i.imgur.com/1DBAzgl.jpg',
-                 'https://i.imgur.com/ZBg2Oib.gif',
-                'https://i.imgur.com/bwatzEB.gif',
-                'https://i.imgur.com/sneZxIS.gif',
-              'https://i.imgur.com/uQoHbdb.gif',
-                'https://i.imgur.com/BoRQdmV.gif',
-                  'https://i.imgur.com/Q4rDeDV.gif',
-                'https://i.imgur.com/ZwS2id5.gif',
-                'https://i.imgur.com/izCZ2fy.gif',
-                'https://i.imgur.com/hHgApHh.gif'
-             ];
-
-            let usedBackgrounds = [];
-            if (usedBackgrounds.length === backgrounds.length) {
-                usedBackgrounds = [];
-            }
-
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * backgrounds.length);
-            } while (usedBackgrounds.includes(randomIndex));
-
-            document.body.style.backgroundImage = `url('${backgrounds[randomIndex]}')`;
-            usedBackgrounds.push(randomIndex);
+            document.body.style.backgroundImage = `url('${backgrounds[bgIndex]}')`;
+            document.body.style.backgroundSize = "auto";
+            bgIndex = (bgIndex + 1) % backgrounds.length;
         }
 
-        // Funkcija za kreiranje srca sa slovom unutar njega
-        function createHeart(letter, positionX, positionY) {
+        function createHeart(letter) {
             const heart = document.createElement("div");
             heart.classList.add("heart");
-
-            // Randomizovanje boje srca
-            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.color = color;
-
+            heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
             heart.innerHTML = `<span>${letter}</span>❤️`;
 
-            heart.style.left = positionX + "px";
-            heart.style.top = positionY + "px";
-            heart.style.animationDuration = Math.random() * 5 + 5 + "s";
+            const side = Math.random() < 0.5 ? 'left' : 'right';
+            const positionX = Math.random() * 400;
+            heart.style.left = side === 'left' ? `${positionX}px` : `${window.innerWidth - positionX}px`;
+            heart.style.top = "-30px";
+            heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
 
             document.body.appendChild(heart);
-
-            // Uklanjanje srca nakon što završi animacija
-            setTimeout(() => {
-                heart.remove();
-            }, 10000);
+            setTimeout(() => heart.remove(), 10000);
         }
 
-        // Kreiramo padajuća srca u redosledu M, I, R, A
-        let letterIndex = 0;
+        function showSignature() {
+            const signature = document.createElement("div");
+            signature.classList.add("signature");
+            signature.textContent = "By *__X__*";
+            document.body.appendChild(signature);
+            setTimeout(() => signature.remove(), 10000);
+        }
+
         setInterval(() => {
-            const randomLetter = letters[letterIndex];
-            createHeart(randomLetter, Math.random() * window.innerWidth, -30); // Pozicija srca na ekranu
-            letterIndex = (letterIndex + 1) % letters.length;
+            letters.forEach(letter => {
+                createHeart(letter);
+            });
         }, 1000);
 
-        // Pokrećemo promenu pozadine
         shuffleBackground();
-        setInterval(shuffleBackground, 300000); // Promena pozadine svakih 5 minuta
-
-        // Dodajemo hologram za "MIRA"
-        setTimeout(() => {
-            const miraText = document.createElement("div");
-            miraText.classList.add("hologram-mira");
-            miraText.textContent = "MIRA";
-            document.body.appendChild(miraText);
-        }, 3000); // Hologram se pojavljuje nakon 3 sekunde
+        setInterval(shuffleBackground, 300000);
+        setInterval(showSignature, 180000);
     </script>
-
 </body>
 </html>
